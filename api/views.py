@@ -15,40 +15,6 @@ class ProductViewsetView(viewsets.ModelViewSet):
     authentication_classes =[authentication.TokenAuthentication]
     permission_classes =[permissions.IsAuthenticated]
 
-    # def list(self,request,*args,**kwargs):
-    #     qs=Products.objects.all()
-    #     serializer=ProductModelSerializer(qs,many=True)
-    #     return Response(data=serializer.data)
-    #
-    # def create(self,request,*args,**kwargs):
-    #     serializer=ProductModelSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(data=serializer.data)
-    #     else:
-    #         return Response(data=serializer.errors)
-    #
-    # def retrieve(self,request,*args,**kwargs):
-    #     id=kwargs.get("id")
-    #     qs=Products.objects.get(id=id)
-    #     serializer=ProductModelSerializer(qs,many=False)
-    #     return Response(data=serializer.data)
-    #
-    # def destroy(self,request,*args,**kwargs):
-    #     id=kwargs.get("id")
-    #     Products.objects.filter(id=id).delete()
-    #     return Response(data="deleted")
-    #
-    # def update(self,request,*args,**kwargs):
-    #     id=kwargs.get("id")
-    #     obj=Products.objects.get(id=id)
-    #     serializer=ProductModelSerializer(data=request.data,instance=obj)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(data=serializer.data)
-    #     else:
-    #         return Response(data=serializer.errors)
-
     @action(methods=["GET"],detail=False)
     def categories(self,request,*args,**kwargs):
         res=Products.objects.values_list('category',flat=True).distinct()
@@ -89,14 +55,7 @@ class CartsView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Carts.objects.filter(user=self.request.user)
-    # def list(self,request,*args,**kwargs):
-    #     qs=request.user.carts_set.all()
-    #     serializer=CartSerializer(qs,many=True)
-    #     return Response(data=serializer.data)
-
-
-
-
+    
 class ProductView(APIView):
 
     def get(self,request,*args,**kwargs):

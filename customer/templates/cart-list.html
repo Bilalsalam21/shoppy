@@ -6,7 +6,7 @@
        <div class="row gx-4 gx-lg-5 align-items-center">
         <div class="col-md-6">
             {%if cart.product.image%}
-            <img class="card-img-top mb-5 mb-md-0" src="{{cart.product.image.url}}"height="200px" width="150px"  alt="..." />
+            <img class="card-img-top mb-5 mb-md-0" src="{{cart.product.image.url}}"height="400px" width="300px"  alt="..." />
             {%else%}
             <img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" height="200px" width="150px" alt="..." />
             {%endif%}
@@ -19,6 +19,7 @@
                 <span> {{cart.product.price}}</span>
             </div>
             <p class="lead"> {{cart.date}}</p>
+           <div class="d-flex">
             <div class="d-flex">
                 <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
                 <a class="btn btn-outline-dark flex-shrink-0" type="button" href="{%url 'place-order' cart.id cart.product.id %}">
@@ -26,6 +27,13 @@
                     Buy now
                 </a>
             </div>
+            <div class="d-flex ms-2">
+               <a class="btn btn-outline-dark flex-shrink-0" type="button" href="{%url 'cart-delete' cart.id %}">
+                    <i class="bi-cart-fill me-1"></i>
+                    delete
+                </a>
+            </div>
+           </div>
         </div>
     </div>
     <hr class="mt-2 mb-2">

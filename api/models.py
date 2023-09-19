@@ -66,3 +66,10 @@ class Orders(models.Model):
     date=models.DateField(auto_now_add=True)
     address=models.CharField(max_length=250)
     phone=models.CharField(max_length=20)
+
+class MyProducts(models.Model):
+    name=models.CharField(max_length=200)
+    price=models.PositiveIntegerField()
+    description=models.CharField(max_length=200)
+    category=models.CharField(max_length=200)
+    image=models.ImageField(null=True,upload_to="images")

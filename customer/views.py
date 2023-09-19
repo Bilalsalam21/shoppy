@@ -1,10 +1,10 @@
 from django.shortcuts import render,redirect
-from django.views.generic import CreateView,FormView,TemplateView,ListView,DetailView
+from django.views.generic import CreateView,FormView,TemplateView,ListView,DetailView,DeleteView,View,UpdateView
 from django.urls import reverse_lazy
-from customer.forms import RegistraionForm,LoginForm
+from customer.forms import RegistraionForm,LoginForm,ProductForm,MyProductForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
-from api.models import Products,Carts,Orders
+from api.models import Products,Carts,Orders,MyProducts
 from django.db.models import Sum
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
@@ -57,6 +57,27 @@ class HomeView(ListView):
     context_object_name="products"
     model=Products
 
+class ProductCreateView(CreateView):
+    template_name="pro-add.html"
+    form_class=MyProductForm
+    success_url=reverse_lazy("myproduct")
+
+    def form_valid(self, form):
+        messages.success(self.request,"product created succesfully")
+        return super().form_valid(form)
+
+    
+    def form_invalid(self, form):
+        messages.error(self.request,"product creation failed")
+        return super().form_invalid(form)
+    
+
+class ProductView(ListView):
+    template_name="yourproduct.html"
+    context_object_name="products"
+    model=Products
+
+   
 @method_decorator(decs,name="dispatch")
 class ProductDetailView(DetailView):
     template_name="cust-productdetail.html"
@@ -84,9 +105,15 @@ class CartListView(ListView):
         total=Carts.objects.filter(user=request.user,status="in-cart").aggregate(tot=Sum("product__price"))
         return render(request,"cart-list.html",{"carts":qs,"total":total})
     
-    # def get_queryset(self):
-    #     return Carts.objects.filter(user=self.request.user)
-
+    
+@method_decorator(decs,name="dispatch")
+class DeleteCart(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("id")
+        Carts.objects.get(id=id).delete()
+        messages.success(request,"item removed from the cart")
+        return redirect("cart-list")
+    
 @method_decorator(decs,name="dispatch")
 class OrderView(TemplateView):
     template_name="checkout.html"
